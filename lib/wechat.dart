@@ -24,6 +24,7 @@ class Wechat {
     return result;
   }
 
+  /// Check if wechat app has was installed.
   static Future<dynamic> isWechatInstalled() async {
     var result = await _channel.invokeMethod(
       'isWechatInstalled'
@@ -31,6 +32,7 @@ class Wechat {
     return result == 'true' ? true : false;
   }
 
+  /// Get wechat sdk api version.
   static Future<dynamic> getApiVersion() async {
     var result = await _channel.invokeMethod(
       'getApiVersion'
@@ -38,6 +40,7 @@ class Wechat {
     return result;
   }
 
+  /// open wechat app.
   static Future<dynamic> openWechat() async {
     var result = await _channel.invokeMethod(
       'openWechat'

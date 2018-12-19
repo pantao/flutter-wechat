@@ -1,14 +1,25 @@
 # wechat
 
-A new flutter plugin project.
+Wechat Plugin for Flutter app.
 
 ## Getting Started
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.io/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+```yaml
+dependencies:
+  wechat: ^0.0.2
+```
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+```dart
+import 'package:wechat/wechat.dart';
+
+...
+  void _share (arguments) async {
+    try {
+      var result = await Wechat.share(arguments);
+      _result = result.toString() ?? 'null result';
+    } catch (e) {
+      _result = e.toString();
+    }
+  }
+...
+```

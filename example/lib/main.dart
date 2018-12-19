@@ -103,6 +103,10 @@ class _MyAppState extends State<MyApp> {
     _result = result.toString();
   }
 
+  void _openWechat () async {
+    var result = await Wechat.openWechat();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -156,6 +160,13 @@ class _MyAppState extends State<MyApp> {
               title: Text('Login via wechat'),
               onTap: () {
                 _login();
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text('Open Wechat'),
+              onTap: () {
+                _openWechat();
               },
             ),
             Text('result: $_result')
