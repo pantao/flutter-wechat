@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Bitmap.CompressFormat;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -89,44 +90,34 @@ public class WechatPlugin implements MethodCallHandler {
         : kind.equals("favorite")
           ? SendMessageToWX.Req.WXSceneFavorite
           : SendMessageToWX.Req.WXSceneSession;
+
+      if (bitmap != null) {
+        Bitmap thumbBitmap = Bitmap.createScaledBitmap(bitmap, 100, 100, true);
+        message.thumbData = convertBitmapToByteArray(thumbBitmap, true);
+      }
       switch (osMessage.what) {
         case 0:
-          if (bitmap != null) {
-            message.setThumbImage(bitmap);
-          }
           request.transaction = String.valueOf(System.currentTimeMillis());
           request.message = message;
           api.sendReq(request);
           break;
         case 1:
-          if (bitmap != null) {
-            message.setThumbImage(bitmap);
-          } else {
+          if (bitmap == null) {
             Toast.makeText(context, "图片路径错误", Toast.LENGTH_SHORT).show();
             break;
           }
           WXImageObject imageObject = new WXImageObject(bitmap);
           message.mediaObject = imageObject;
-          Bitmap bmp = Bitmap.createScaledBitmap(bitmap, 80, 80, true);
-          bmp.recycle();
-          message.setThumbImage(bitmap);
           request.transaction = String.valueOf(System.currentTimeMillis());
           request.message = message;
           api.sendReq(request);
           break;
         case 2:
-          if (bitmap != null) {
-            message.setThumbImage(bitmap);
-          }
           request.transaction = String.valueOf(System.currentTimeMillis());
           request.message = message;
-
           api.sendReq(request);
           break;
         case 3:
-          if (bitmap != null) {
-            message.setThumbImage(bitmap);
-          }
           request.transaction = String.valueOf(System.currentTimeMillis());
           request.message = message;
           api.sendReq(request);
@@ -155,8 +146,21 @@ public class WechatPlugin implements MethodCallHandler {
     else if (call.method.equals("register")) {
       appid = call.argument("appid");
       api = WXAPIFactory.createWXAPI(context, appid, true);
-      api.registerApp(appid);
-      result.success(null);
+      result.success(api.registerApp(appid));
+    }
+    // Check if wechat app installed
+    else if (call.method.equals("isWechatInstalled")) {
+      if (api == null) {
+        result.success(false);
+      } else {
+        result.success(api.isWXAppInstalled());
+      }
+    }
+    else if (call.method.equals("getApiVersion")) {
+      result.success(api.getWXAppSupportAPI());
+    }
+    else if (call.method.equals("openWechat")) {
+      result.success(api.openWXApp());
     }
     else if (call.method.equals("share")) {
       final String kind = call.argument("kind");
@@ -222,11 +226,12 @@ public class WechatPlugin implements MethodCallHandler {
           message = new WXMediaMessage();
           message.title = call.argument("title").toString();
           message.description = call.argument("description").toString();
+          final String imageResourceUrl = call.argument("resourceUrl");
           //网络图片或者本地图片
           new Thread() {
             public void run() {
               Message osMessage = new Message();
-              bitmap = GetBitmap(coverUrl);
+              bitmap = GetBitmap(imageResourceUrl);
               osMessage.what = 1;
               handler.sendMessage(osMessage);
             }
@@ -299,6 +304,23 @@ public class WechatPlugin implements MethodCallHandler {
       e.printStackTrace();
       return null;
     }
+  }
+
+  public byte[] convertBitmapToByteArray(final Bitmap bitmap, final boolean needRecycle) {
+    ByteArrayOutputStream output = new ByteArrayOutputStream();
+		bitmap.compress(CompressFormat.PNG, 100, output);
+		if (needRecycle) {
+			bitmap.recycle();
+		}
+		
+		byte[] result = output.toByteArray();
+		try {
+			output.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
   }
 
   private static void copy(InputStream in, OutputStream out) throws IOException {

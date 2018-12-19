@@ -38,6 +38,20 @@
     result(nil);
   }
 
+  else if ([@"isWechatInstalled" isEqualToString:call.method]) {
+    BOOL installed = [WXApi isWXAppInstalled];
+    result([NSString stringWithFormat:@"%@", installed ? @"true" : @"false"]);
+  }
+
+  else if ([@"getApiVersion" isEqualToString:call.method]) {
+    NSString *apiVersion = [WXApi getApiVersion];
+    result([NSString stringWithFormat:@"%@", apiVersion]);
+  }
+
+  else if ([@"openWechat" isEqualToString:call.method]) {
+    result(nil);
+  }
+
   // Share something to Wechat
   else if ([@"share" isEqualToString:call.method]) {
     

@@ -24,6 +24,27 @@ class Wechat {
     return result;
   }
 
+  static Future<dynamic> isWechatInstalled() async {
+    var result = await _channel.invokeMethod(
+      'isWechatInstalled'
+    );
+    return result == 'true' ? true : false;
+  }
+
+  static Future<dynamic> getApiVersion() async {
+    var result = await _channel.invokeMethod(
+      'getApiVersion'
+    );
+    return result;
+  }
+
+  static Future<dynamic> openWechat() async {
+    var result = await _channel.invokeMethod(
+      'openWechat'
+    );
+    return result;
+  }
+
   /// Sharing
   /// 
   /// arguments object structure
