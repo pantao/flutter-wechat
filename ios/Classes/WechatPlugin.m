@@ -125,7 +125,7 @@
     else if ([@"video" isEqualToString:kind]) {
       NSString *resourceUrl = arguments[@"resourceUrl"];
       NSString *coverUrl = arguments[@"coverUrl"];
-      NSString *url = arguments[@"url"];
+      // NSString *url = arguments[@"url"];
       NSString *title = arguments[@"title"];
       NSString *description = arguments[@"description"];
 
