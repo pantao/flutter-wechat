@@ -14,6 +14,8 @@ Wechat SDK for Flutter App.
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
+  s.static_framework = true
+  
   s.dependency 'Flutter'
   s.dependency 'WechatOpenSDK'
 
