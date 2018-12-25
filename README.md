@@ -196,5 +196,13 @@ class _MyAppState extends State<MyApp> {
 
 ### error: include of non-modular header inside framework module 'wechat.WechatPlugin'
 
+This error always accoured when you create your flutter project with `-i swift` options:
+
+```bash
+flutter create -i swift myapp
+```
+
+Fix this, do like this:
+
 Open `ios/Runner.xcworkspace`,  Navigate to `TARGETS` -> `Build Settings`, then search `Allow Non`, set
 ` Allow Non-modular includes in Framework Modules` to `YES`
