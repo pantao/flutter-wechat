@@ -1,8 +1,8 @@
 name: wechat
 description: Wechat SDK Plugin for Flutter app.
-version: 0.0.4
+version: 0.0.5
 author: pantao<54778899@qq.com>
-homepage: https://pantao.onmr.com
+homepage: https://github.com/pantao/flutter-wechat
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"
